@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Weather forecast</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='32' r='14' fill='%23ffc400'/></svg>">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <span class="brand">
+        <svg width="26" height="26" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="14" fill="#ffc400"/><g stroke="#ffc400" stroke-width="5" stroke-linecap="round"><line x1="32" y1="4" x2="32" y2="11"/><line x1="32" y1="53" x2="32" y2="60"/><line x1="4" y1="32" x2="11" y2="32"/><line x1="53" y1="32" x2="60" y2="32"/><line x1="12" y1="12" x2="17" y2="17"/><line x1="47" y1="47" x2="52" y2="52"/><line x1="12" y1="52" x2="17" y2="47"/><line x1="47" y1="17" x2="52" y2="12"/></g></svg>
+        Weather forecast
+      </span>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="sample-banner" class="banner" hidden>
+      <strong>Showing sample data.</strong> Add your Met Office DataHub API key to the <code>.env</code> file and
+      restart the server to see the live forecast. See <code>README.md</code> for how.
+    </div>
+
+    <section class="title-row">
+      <h1 id="location-title">Weather</h1>
+      <div class="search" id="search">
+        <label for="search-input" class="visually-hidden">Find a forecast</label>
+        <input id="search-input" type="search" placeholder="Search town, city or UK postcode" autocomplete="off">
+        <div class="search-results" id="search-results" role="listbox" hidden></div>
+      </div>
+    </section>
+
+    <div id="error" class="error" hidden></div>
+
+    <nav class="day-tabs" id="day-tabs" aria-label="Forecast days"></nav>
+
+    <section class="forecast-panel" id="forecast-panel" aria-live="polite">
+      <div class="panel-head">
+        <h2 id="table-heading">7 day forecast</h2>
+        <div class="controls">
+          <div class="unit-toggle" role="group" aria-label="Temperature units">
+            <button type="button" data-temp-unit="C">°C</button>
+            <button type="button" data-temp-unit="F">°F</button>
+          </div>
+          <label class="wind-unit">Wind
+            <select id="wind-unit">
+              <option value="mph">mph</option>
+              <option value="kph">km/h</option>
+              <option value="kt">knots</option>
+              <option value="ms">m/s</option>
+              <option value="bft">Beaufort</option>
+            </select>
+          </label>
+          <label class="full-toggle"><input type="checkbox" id="full-forecast"> Show full forecast</label>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <button type="button" class="scroll-btn left" id="scroll-left" aria-label="Earlier hours">‹</button>
+        <div class="table-scroll" id="table-scroll">
+          <table class="hourly" id="hourly-table"></table>
+        </div>
+        <button type="button" class="scroll-btn right" id="scroll-right" aria-label="Later hours">›</button>
+      </div>
+
+      <div class="panel-foot">
+        <span id="updated"></span>
+        <details class="explain">
+          <summary>Forecast table explained</summary>
+          <dl>
+            <dt>Chance of precipitation</dt><dd>The chance of at least 0.1 mm of rain, sleet, snow or hail in that hour.</dd>
+            <dt>Feels like</dt><dd>Allows for wind chill and humidity.</dd>
+            <dt>Wind</dt><dd>The arrow points the way the wind is blowing; the letters show where it is coming from.</dd>
+            <dt>Visibility</dt><dd>VP very poor (&lt;1 km), P poor (1–4 km), M moderate (4–10 km), G good (10–20 km),
+              VG very good (20–40 km), E excellent (&gt;40 km).</dd>
+            <dt>UV</dt><dd>1–2 low, 3–5 moderate, 6–7 high, 8–10 very high, 11+ extreme.</dd>
+          </dl>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer container">
+    Inspired by the previous version of the Met Office website, which served me well.
+    <button type="button" class="link-btn" id="forget-secret" hidden></button>
+  </footer>
+
+  <dialog id="secret-dialog" class="secret-dialog" aria-labelledby="secret-title">
+    <form id="secret-form">
+      <h2 id="secret-title"></h2>
+      <p id="secret-message"></p>
+      <label for="secret-input" class="visually-hidden">Passcode or API key</label>
+      <input id="secret-input" type="password" autocomplete="off" spellcheck="false" required>
+      <p class="hint" id="secret-hint"></p>
+      <button type="submit">Continue</button>
+    </form>
+  </dialog>
+
+  <template id="search-extras">
+    <button type="button" class="search-item locate" data-action="locate">⌖ Use my current location</button>
+  </template>
+
+  <script src="icons.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
